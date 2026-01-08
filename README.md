@@ -1,0 +1,136 @@
+<#
+.SYNOPSIS
+    Project and Visio Cleanup Tool
+.DESCRIPTION
+    Scans for and uninstalls all detected versions (MSI and C2R) of Microsoft Project and Microsoft Visio.
+    Designed to prep machines for clean O365/Plan installations.
+.NOTES
+    Run as Administrator.
+#>
+
+# --- Configuration ---
+$AppsToRemove = @("Project", "Visio")
+$LogPath = "C:\Temp\ProjectVisioCleanup.log"
+
+# Create Temp directory if it doesn't exist
+if (!(Test-Path "C:\Temp")) { New-Item -ItemType Directory -Force -Path "C:\Temp" | Out-Null }
+
+function Write-Log {
+    Param ([string]$Message)
+    $TimeStamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    $LogEntry = "$TimeStamp - $Message"
+    Write-Host $LogEntry -ForegroundColor Cyan
+    Add-Content -Path $LogPath -Value $LogEntry
+}
+
+function Get-UninstallRegistryKeys {
+    # Scan both 64-bit and 32-bit uninstall keys
+    $HiveHKLM = [Microsoft.Win32.RegistryKey]::OpenBaseKey([Microsoft.Win32.RegistryHive]::LocalMachine, [Microsoft.Win32.RegistryView]::Registry64)
+    $Keys = @(
+        "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+        "SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+    )
+
+    $Results = @()
+    
+    foreach ($Key in $Keys) {
+        try {
+            $RegKey = $HiveHKLM.OpenSubKey($Key)
+            if ($RegKey) {
+                foreach ($SubKeyName in $RegKey.GetSubKeyNames()) {
+                    $SubKey = $RegKey.OpenSubKey($SubKeyName)
+                    $DisplayName = $SubKey.GetValue("DisplayName")
+                    $UninstallString = $SubKey.GetValue("UninstallString")
+                    
+                    if ($DisplayName) {
+                        $Results += [PSCustomObject]@{
+                            DisplayName     = $DisplayName
+                            UninstallString = $UninstallString
+                            SubKeyName      = $SubKeyName # Often the GUID for MSI
+                        }
+                    }
+                }
+            }
+        }
+        catch {
+            Write-Log "Error reading registry path $Key : $_"
+        }
+    }
+    return $Results
+}
+
+Write-Log "--- Starting Project and Visio Cleanup Tool ---"
+
+# --- Main Logic ---
+
+$InstalledApps = Get-UninstallRegistryKeys
+
+foreach ($App in $InstalledApps) {
+    foreach ($Target in $AppsToRemove) {
+        if ($App.DisplayName -like "*$Target*") {
+            # Filter out language packs or unrelated tools if necessary
+            if ($App.DisplayName -match "Language Pack" -or $App.DisplayName -match "MUI") {
+                continue
+            }
+
+            Write-Log "Detected: $($App.DisplayName)"
+
+            # --- Scenario A: MSI Installation (GUID based) ---
+            if ($App.UninstallString -match "MsiExec.exe") {
+                # Extract GUID. Usually the SubKeyName in Uninstall path is the GUID {}
+                $Guid = $App.SubKeyName
+                
+                if ($Guid -match "^\{.*\}$") {
+                    Write-Log "Type: MSI. Attempting Uninstall for GUID: $Guid"
+                    $Args = "/x $Guid /qn /norestart"
+                    try {
+                        Start-Process "msiexec.exe" -ArgumentList $Args -Wait -NoNewWindow
+                        Write-Log "Success: MSI Uninstall command completed for $($App.DisplayName)."
+                    }
+                    catch {
+                        Write-Log "Error: Failed to uninstall $($App.DisplayName). $_"
+                    }
+                }
+            }
+            # --- Scenario B: Click-to-Run (C2R) ---
+            elseif ($App.UninstallString -match "OfficeClickToRun.exe") {
+                Write-Log "Type: Click-to-Run. Attempting to trigger removal."
+                
+                # C2R removal is tricky via registry string. 
+                # Best method is locating the OfficeClickToRun.exe and passing specific scenarios.
+                # However, for robustness, we often need to rely on the Office Deployment Tool (ODT).
+                
+                # Try to parse the uninstall string to run it silently
+                # Usually looks like: "C:\Program Files\Common Files\Microsoft Shared\ClickToRun\OfficeClickToRun.exe" scenario=install scenariosubtype=PrjPro ...
+                
+                if ($App.UninstallString) {
+                    # Capture the arguments. We need to replace displaylevel=True with False for silent
+                    $SplitCmd = $App.UninstallString -split "exe"
+                    $ExePath = $SplitCmd[0] + "exe"
+                    $Arguments = $SplitCmd[1].Trim()
+                    
+                    # Force silent 
+                    $Arguments = $Arguments.Replace("displaylevel=True", "displaylevel=False")
+                    
+                    Write-Log "Executing C2R Removal: $ExePath $Arguments"
+                    try {
+                        Start-Process $ExePath -ArgumentList $Arguments -Wait -NoNewWindow
+                        Write-Log "Success: C2R Uninstall command completed."
+                    }
+                    catch {
+                        Write-Log "Error: Failed C2R uninstall for $($App.DisplayName)."
+                    }
+                }
+            }
+            else {
+                Write-Log "Warning: Could not identify uninstall method for $($App.DisplayName). Manual check required."
+            }
+        }
+    }
+
+    
+}
+
+Write-Log "--- Cleanup Completed. A restart is recommended before installing new versions. ---"
+
+
