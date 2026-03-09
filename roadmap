@@ -1,0 +1,142 @@
+================================================================================
+TABLE 1: SHAREPOINT & DATA GOVERNANCE STRATEGIC ROADMAP
+================================================================================
+
+1. Feature / Product: "Reimagined" Architecture
+Target Date: Late 2025 - 2026
+Pros: Faster site creation; natively integrates AI; modern, cohesive user experience.
+Cons: Steep learning curve for current site owners; heavily customized legacy sites may break.
+Implementation Considerations: Conduct a full audit of classic/customized sites before rollout. Require mandatory change management training for intranet creators.
+Source URL: https://www.microsoft.com/microsoft-365/roadmap?id=547732
+
+2. Feature / Product: Restricted Access Control (RAC)
+Target Date: Available Now
+Pros: Prevents AI oversharing; enforces strict Zero Trust boundaries at the site level via Entra ID.
+Cons: High admin overhead; poor Entra ID group hygiene will instantly block valid users.
+Implementation Considerations: Clean up Entra ID security groups first. Test RAC in "audit mode" on a single department before global enforcement.
+Source URL: https://learn.microsoft.com/en-us/sharepoint/restricted-access-control
+
+3. Feature / Product: AI-Assisted FAQ Web Parts
+Target Date: May 2026
+Pros: Drastically reduces manual content updates; keeps organizational knowledge fresh.
+Cons: Risk of AI "hallucinations" suggesting incorrect or out-of-context updates.
+Implementation Considerations: Establish strict governance: AI suggestions must always be reviewed and approved by a human site owner before publishing.
+Source URL: https://www.microsoft.com/microsoft-365/roadmap?id=482198
+
+4. Feature / Product: SharePoint Agents (Viva Engage)
+Target Date: 2026
+Pros: Deflects IT/HR helpdesk tickets by providing instant, grounded answers to employees.
+Cons: If underlying SharePoint files are messy or outdated, the Agent will confidently give wrong answers.
+Implementation Considerations: The "Data Clean-up" phase of your Year 1 roadmap is a non-negotiable prerequisite. Garbage data equals garbage Agent answers.
+Source URL: https://www.microsoft.com/microsoft-365/roadmap?filters=SharePoint
+
+5. Feature / Product: Bulk Data Lifecycle (Purview)
+Target Date: December 2026
+Pros: Massive time-saver for compliance teams managing retention at an enterprise scale.
+Cons: A poorly written KQL query could accidentally delete or retain the wrong massive dataset.
+Implementation Considerations: Restrict tool access to senior compliance admins only. Mandate that all KQL queries run in a simulation environment before execution.
+Source URL: https://www.microsoft.com/en-us/microsoft-365/roadmap?id=392457
+
+
+================================================================================
+TABLE 2: MICROSOFT 365 CORE STRATEGIC ROADMAP (COPILOT, AGENTS, LTSC)
+================================================================================
+
+1. Strategic Initiative: Agentic AI (Agent Mode)
+Target Date: Early - Mid 2026
+Pros: Massive productivity gains; automates complex, multi-step tasks natively on the canvas in Excel, Word, and PPT.
+Cons: High licensing costs ($30/user/mo); severe user frustration if they lack prompt engineering skills.
+Implementation Considerations: Shift training away from "how to click buttons" to "how to manage an AI assistant." Invest heavily in role-based prompt training.
+Source URL: https://techcommunity.microsoft.com/blog/microsoftteamsblog/what%E2%80%99s-new-in-microsoft-teams--microsoft-ignite-2025/4470387
+
+2. Strategic Initiative: Teams Facilitator Agent
+Target Date: Mid-2025 to 2026
+Pros: Eliminates manual note-taking; automatically pushes action items directly to Planner.
+Cons: Privacy concerns regarding constant meeting transcription; nuance can be lost in AI summaries.
+Implementation Considerations: Update corporate HR and meeting policies regarding AI transcription consent. Train users to actively review AI notes.
+Source URL: https://www.microsoft.com/microsoft-365/roadmap?id=478611
+
+3. Strategic Initiative: Microsoft Agent 365
+Target Date: 2026
+Pros: Centralized IT visibility; prevents unchecked "AI sprawl" across the organization.
+Cons: Adds another complex admin center for your IT team to learn and manage.
+Implementation Considerations: Align IT, Security, and Legal teams to define global AI guardrails before opening up custom Agent creation to standard business users.
+Source URL: https://techcommunity.microsoft.com/blog/copilotadminupdates
+
+4. Strategic Initiative: M365 Pricing Update
+Target Date: July 1, 2026
+Pros: Bundles premium tools (Intune Suite, Defender P1) into E3/E5, enabling major vendor consolidation.
+Cons: Immediate budget shock, particularly the massive ~25% to 29% hike for Frontline (F3) workers.
+Implementation Considerations: Act immediately. Audit F3 ghost accounts and aggressively cancel redundant 3rd-party tools (like Workspace ONE) before July.
+Source URL: https://www.microsoft.com/en-us/licensing/news/2026-M365-Packaging-Pricing-Updates
+
+5. Strategic Initiative: Zero Trust & Edge Security
+Target Date: December 2026
+Pros: Strong defense against data leaks; persistent watermarks deter screen-capturing sensitive data.
+Cons: Can cause user friction or browser performance hits if policies are overly restrictive.
+Implementation Considerations: Pilot watermarking with high-risk departments first (Finance/Execs). Communicate clearly why watermarks are appearing.
+Source URL: https://learn.microsoft.com/en-us/purview/purview
+
+6. Strategic Initiative: Office 2024 LTSC End of Support
+Target Date: October 9, 2029
+Pros: Forces legacy technical debt clean-up; keeps air-gapped networks compliant and secure.
+Cons: Highly manual, expensive deployment process for disconnected environments.
+Implementation Considerations: Strictly define who actually needs to be offline. Budget and plan for the successor ("Office 2028 LTSC") in Year 3 to ensure testing runway.
+Source URL: https://learn.microsoft.com/en-us/lifecycle/products/office-ltsc-2024
+
+
+================================================================================
+TABLE 3: COMBINED STRATEGIC ROADMAP (INTUNE, COPILOT, LTSC)
+================================================================================
+
+1. Strategic Initiative: Workspace ONE to Intune Migration
+Timeline: Year 1 (2026)
+Pros: Massive cost savings by eliminating Omnissa contract. Unlocks native Zero Trust security and cloud-based software deployment.
+Cons: High operational friction. "Unenroll/re-enroll" process can temporarily surge helpdesk tickets.
+Implementation Considerations: Repackage apps to .intunewin first. Use phased deployment rings starting with IT to test the transition.
+Source URL: https://techcommunity.microsoft.com/blog/microsoftintuneblog/microsoft-365-adds-advanced-microsoft-intune-solutions-at-scale/4474272
+
+2. Strategic Initiative: M365 Copilot Targeted Rollout
+Timeline: Year 1 (2026)
+Pros: Massive productivity boost; Security Copilot natively included in E5 licenses for IT.
+Cons: High cost ($30/user/month add-on); major security risk if SharePoint permissions are messy.
+Implementation Considerations: Do not buy for everyone. Pilot only with high-ROI E5 users. Run a strict SharePoint data governance audit before turning Copilot on.
+Source URL: https://www.microsoft.com/en-us/microsoft-365/enterprise/copilot-for-microsoft-365
+
+3. Strategic Initiative: Office 2024 LTSC Segmentation & Cleanup
+Timeline: Year 1 (2026)
+Pros: Keeps highly regulated, air-gapped, and factory-floor devices secure without internet.
+Cons: Creates technical debt and a split-brain culture where users lack modern collaboration tools.
+Implementation Considerations: Strictly audit who gets this license. Define a hard policy for "True Offline" personas.
+Source URL: https://learn.microsoft.com/en-us/office/ltsc/2024/overview
+
+4. Strategic Initiative: Custom Agent Development (Copilot Studio)
+Timeline: Year 2-3 (2027-2028)
+Pros: Build custom AI agents grounded directly in your proprietary internal business data (HR, ERP).
+Cons: Custom agents accessed by non-Copilot licensed users incur unpredictable Pay-As-You-Go consumption costs.
+Implementation Considerations: Set strict IT governance via Microsoft Agent 365. Restrict creation to approved developers.
+Source URL: https://learn.microsoft.com/en-us/microsoft-copilot-studio/
+
+5. Strategic Initiative: The LTSC 2029 EoL Migration
+Timeline: Year 3 (2028-2029)
+Pros: Ensures your offline workforce remains supported well beyond the Office 2024 lifecycle.
+Cons: Highly manual, expensive, and time-consuming deployment process.
+Implementation Considerations: Office 2024 LTSC hits End of Support Oct 9, 2029. Plan to pilot its successor in early 2028 to give your team testing runway.
+Source URL: https://learn.microsoft.com/en-us/lifecycle/products/office-ltsc-2024
+
+
+
+Here is the executive-level business case—the "too good to pass up" benefits—that justify the pain of the transition over your 3-year roadmap.
+________________________________________
+1. The Hard ROI: Stop Paying the "Tax"
+This is usually the strongest argument for the C-suite. If your organization is licensed for Microsoft 365 E3 or E5 (which is standard for enterprise M365 deployments), you are already paying for Microsoft Intune. By keeping Workspace ONE, you are paying a massive redundancy tax. Transitioning allows you to completely eliminate the Broadcom/Omnissa renewal contract. In an enterprise of your size, this consolidation often saves hundreds of thousands—if not millions—of dollars over a three-year term. That is budget you can reclaim and redirect toward your AI and Copilot rollouts.
+2. Native Security vs. Bolted-On Security
+Cybersecurity in 2026 relies on "Zero Trust"—verifying every single login attempt based on identity and device health.
+•	The Workspace ONE way: Workspace ONE has to "talk" to Microsoft Entra ID via APIs to report if a device is safe. This creates a bridge. Bridges can break, syncs can delay, and workarounds are often required.
+•	The Intune way: Intune, Entra ID, and Microsoft Defender share the exact same brain (the Microsoft Graph). If Defender detects malware on a laptop, Intune instantly flips the device to "non-compliant," and Entra ID instantly revokes the user's access to their M365 email and files. There is no latency. It is native, impenetrable security.
+3. Feeding the AI Engine (Future-Proofing for 2029)
+Your 3-year roadmap is going to be heavily dominated by AI. Microsoft is building Security Copilot and Copilot for IT natively into its admin centers. Because Workspace ONE is a third-party data silo, Microsoft’s AI cannot natively read its telemetry. By moving your devices to Intune, your IT operations and security teams will be able to use natural language to query your entire global fleet (e.g., "Which devices in Europe are failing the latest Windows update?"). Intune sets the data foundation required to actually use Microsoft's AI tools for IT automation.
+4. The "Single Pane of Glass" for IT Operations
+Right now, your IT team is managing Office 2024 installations, M365 licenses, Exchange mailboxes, and identity in Microsoft portals, but jumping into Workspace ONE to manage the physical devices. This split-brain administration requires double the training and doubles the vendor troubleshooting when something goes wrong. Standardizing on Intune unifies your entire IT administration into a single vendor ecosystem.
+________________________________________
+The PM Summary for Leadership: "Migrating to Intune will require 6 to 9 months of targeted operational friction. However, doing so eliminates our duplicate licensing costs, closes critical latency gaps in our Zero Trust security posture, and integrates our device fleet directly into Microsoft's AI ecosystem, future-proofing our architecture for the next decade."
